@@ -177,6 +177,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\GuestbookRepository.cs" />
     <Compile Include="Models\GuestbookEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -240,6 +241,8 @@
     <Content Include="Global.asax" />
     <Content Include="Views\Guestbook\Create.cshtml" />
     <Content Include="Views\Guestbook\Index.cshtml" />
+    <Content Include="Views\Guestbook\CommentSummary.cshtml" />
+    <Content Include="Views\Guestbook\Show.cshtml" />
     <None Include="_bin_deployableAssemblies\x86\sqlcese40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceqp40.dll" />
     <None Include="_bin_deployableAssemblies\x86\sqlceme40.dll" />

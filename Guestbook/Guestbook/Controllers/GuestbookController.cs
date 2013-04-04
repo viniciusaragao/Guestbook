@@ -9,35 +9,52 @@ namespace Guestbook.Controllers
 {
     public class GuestbookController : Controller
     {
+        private IGuestbookRepository _repository;
 
-        private GuestbookContext _db = new GuestbookContext();
+        public GuestbookController()
+        {
+            _repository = new GuestbookRepository();
+
+        }
+        public GuestbookController(IGuestbookRepository repository)
+        {
+            _repository = repository;
+        }
 
         public ActionResult Index()
         {
-            var mostRecentEntries =
-            (from entry in _db.Entries
-             orderby entry.DateAdded descending
-             select entry).Take(20);
-             ViewBag.Entries = mostRecentEntries.ToList();
-
-            return View();
+            var mostRecentEntries = _repository.GetMostRecentEntries();
+            return View(mostRecentEntries);
         }
 
         public ActionResult Create()
         {
-
             return View();
         }
 
         [HttpPost]
         public ActionResult Create(GuestbookEntry entry)
         {
-            entry.DateAdded = DateTime.Now;
+            if (ModelState.IsValid)
+            {
+                _repository.AddEntry(entry);
+                return RedirectToAction("Index");
+            }
+            return View(entry);
+        }
 
-            _db.Entries.Add(entry);
-            _db.SaveChanges();
-
-            return RedirectToAction("Index");
+        public ViewResult Show(int id)
+        {
+            var entry = _repository.FindById(id);
+            bool hasPermission = User.Identity.Name == entry.Name;
+            ViewBag.HasPermission = hasPermission;
+            return View(entry);
+        }
+        public ActionResult CommentSummary()
+        {
+            var entries = _repository.GetCommentSummary();
+            return View(entries);
         }
     }
 }
+
